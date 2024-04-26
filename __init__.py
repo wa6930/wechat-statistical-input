@@ -47,7 +47,7 @@ argsDb ={
     "require_list": "all" if 'require_list' not in config else config['require_list'],  # 需要的数据库名称（可选）
     "wxid": selectItem['wxid'],  # wxid_，用于确认用户文件夹（可选）
 }
-bias_addr = get_wechat_db(argsDb["require_list"], None, argsDb["wxid"], True)
+bias_addr = get_wechat_db(argsDb["require_list"], None, argsDb["wxid"], False)
 allDbAddr = None
 for key in bias_addr.keys():
     if selectItem['filePath'] == key:
