@@ -1,0 +1,7 @@
+{
+  "checkDataWithOpen": true,
+  "useDataDeduplication": true,
+  "dataDeduplicationDays": 3,
+
+
+}
