@@ -1,9 +1,8 @@
 from pywxdump import *
-from pywxdump_mini import *
 import sys
 import json
 
-wechatInfo = read_info()
+wechatInfo = read_info(VERSION_LIST, False)
 wechatIsNotRunning = type(read_info()) is str
 lenWechatInfo = len(wechatInfo)
 selectItem = {}
@@ -36,12 +35,7 @@ if config is None:
     print('最外层config.json不存在')
     sys.exit(1)
 print('load-config:', config)
-args = {
-    "mode": "decrypt",
-    "key": selectItem['key'],  # 密钥
-    "db_path": selectItem['filePath'],  # 数据库路径
-    "out_path": '/path/to/output' if 'output' not in config else config['output'],  # 输出路径（必须是目录）[默认为当前路径下decrypted文件夹]
-}
+
 argsDb ={
     "mode": "db_path",
     "require_list": "all" if 'require_list' not in config else config['require_list'],  # 需要的数据库名称（可选）
@@ -57,5 +51,16 @@ for key in bias_addr.keys():
 if allDbAddr is None:
     print('获取addr对应的db失败')
     sys.exit(1)
-print('bias_addr', bias_addr[selectItem['filePath']])
-# result = batch_decrypt(args["key"], args["db_path"], args["out_path"], True)
+if 'all' not in allDbAddr:
+    print('获取addr对应的db失败,获取db的数组失败')
+    sys.exit(1)
+dbArr = allDbAddr['all']
+print('bias_addr', dbArr)
+args = {
+    "mode": "decrypt",
+    "key": selectItem['key'],  # 密钥
+    # "db_path": selectItem['filePath'],  # 数据库路径
+    "out_path": '/output' if 'output' not in config else config['output'],  # 输出路径（必须是目录）[默认为当前路径下decrypted文件夹]
+}
+for db in dbArr:
+    result = batch_decrypt(args["key"], db, args['out_path'], True)
